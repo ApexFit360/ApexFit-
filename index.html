@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ApexFit – Elevate Your Strength</title>
+<meta name="description" content="ApexFit: workouts, yoga, Indian food calories and daily fitness reminders.">
+<meta name="theme-color" content="#07070c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="intro">
+  <div class="logo" aria-label="ApexFit"><span style="--i:0">A</span><span style="--i:1">P</span><span style="--i:2">E</span><span style="--i:3">X</span><span style="--i:4">F</span><span style="--i:5">I</span><span style="--i:6">T</span></div>
+  <div class="line"></div>
+  <div class="tag">Elevate your strength</div>
+  <div class="skip">Tap to continue</div>
+</div>
+
+<div class="bg"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
+<div id="ban" class="ban"></div>
+<div id="toast" class="toast"></div>
+
+<main>
+  <section id="home" class="view active"><div id="homeBox"></div></section>
+
+  <section id="food" class="view">
+    <h2 class="title">Calorie Guide</h2>
+    <p class="sub">Tap any dish to see its calories and nutrition.</p>
+    <div class="glass" id="fsum"></div>
+    <input class="in" id="fq" type="search" placeholder="Search Indian dishes…">
+    <div class="chips" id="fcats"></div>
+    <div id="flist"></div>
+    <h3 class="sec">Today’s plate</h3>
+    <div class="glass" id="plate"></div>
+  </section>
+
+  <section id="work" class="view">
+    <h2 class="title">Workout</h2>
+    <p class="sub">Pick a plan and follow it day by day.</p>
+    <div class="chips" id="wprog"></div>
+    <div class="chips" id="wdays"></div>
+    <div id="wlist"></div>
+    <div class="glass">
+      <div class="eyebrow">Rest timer</div>
+      <div class="tdisp" id="tdisp">00:00</div>
+      <div class="chips" style="padding-bottom:0">
+        <button class="chip" data-act="timer" data-s="30">30s</button>
+        <button class="chip" data-act="timer" data-s="45">45s</button>
+        <button class="chip" data-act="timer" data-s="60">60s</button>
+        <button class="chip" data-act="timer" data-s="90">90s</button>
+        <button class="chip" data-act="tstop">Reset</button>
+      </div>
+    </div>
+    <h3 class="sec">Exercise library</h3>
+    <div id="wlib"></div>
+  </section>
+
+  <section id="yoga" class="view">
+    <h2 class="title">Yoga</h2>
+    <p class="sub">Step-by-step poses and guided routines.</p>
+    <div class="chips" id="yr"></div>
+    <div id="ylist"></div>
+  </section>
+
+  <section id="remind" class="view">
+    <h2 class="title">Reminders</h2>
+    <p class="sub">Workout, yoga, meals, water and sleep: set them all.</p>
+    <div class="glass">
+      <div class="eyebrow">New reminder</div>
+      <div class="frm">
+        <select class="in" id="rc">
+          <option value="workout">🏋️ Workout</option>
+          <option value="yoga">🧘 Yoga</option>
+          <option value="meal">🍽️ Meal</option>
+          <option value="water">💧 Water</option>
+          <option value="sleep">😴 Sleep</option>
+          <option value="other">⏰ Other</option>
+        </select>
+        <input class="in" id="rt" type="time" value="07:00">
+      </div>
+      <input class="in" id="rl" type="text" placeholder="e.g. Morning run" maxlength="60">
+      <div class="chips" id="dow"></div>
+      <button class="btn full" data-act="radd">Add reminder</button>
+    </div>
+    <div class="glass" id="rlist"></div>
+    <button class="btn ghost full" data-act="notif">Enable notifications</button>
+    <p class="mut small">Reminders ring while ApexFit is open (a banner appears, plus a notification if enabled).</p>
+  </section>
+
+  <section id="about" class="view">
+    <h2 class="title">About</h2>
+    <div class="glass">
+      <h3 class="serif" style="margin-top:0">ApexFit</h3>
+      <p class="mut">ApexFit is your daily fitness companion: simple workout plans, step-by-step yoga, a calorie guide for Indian food and reminders that keep you on track. Small steps, done every day, build a stronger you.</p>
+    </div>
+    <h3 class="sec">Fitness basics</h3>
+    <div class="grid2">
+      <div class="glass"><b>🏃 Move</b><p class="mut small">Aim for about 150 minutes of moderate activity a week, plus 2 days of strength training.</p></div>
+      <div class="glass"><b>🥗 Nourish</b><p class="mut small">Build meals around protein, fibre and vegetables. Go easy on fried and sugary foods.</p></div>
+      <div class="glass"><b>💧 Hydrate</b><p class="mut small">Sip water through the day. Pale-yellow urine is a simple sign you are well hydrated.</p></div>
+      <div class="glass"><b>😴 Recover</b><p class="mut small">Adults generally need 7–9 hours of sleep. Muscles grow during rest, so keep rest days.</p></div>
+    </div>
+    <h3 class="sec">Beginner rules</h3>
+    <div class="glass">
+      <p class="mut small" style="margin:0 0 6px">1. Start small and build up gradually.</p>
+      <p class="mut small" style="margin:0 0 6px">2. Warm up for 5 minutes, cool down and stretch after.</p>
+      <p class="mut small" style="margin:0 0 6px">3. Focus on form before speed or weight.</p>
+      <p class="mut small" style="margin:0">4. Stop if you feel sharp pain or dizziness.</p>
+    </div>
+    <h3 class="sec">BMI &amp; daily calories</h3>
+    <div class="glass">
+      <div class="frm">
+        <input class="in" id="ch" type="number" inputmode="decimal" placeholder="Height (cm)">
+        <input class="in" id="cw" type="number" inputmode="decimal" placeholder="Weight (kg)">
+      </div>
+      <div class="frm">
+        <input class="in" id="ca" type="number" inputmode="numeric" placeholder="Age">
+        <select class="in" id="cg"><option value="m">Male</option><option value="f">Female</option></select>
+      </div>
+      <select class="in" id="cact">
+        <option value="1.2">Little or no exercise</option>
+        <option value="1.375">Light exercise (1–3 days/week)</option>
+        <option value="1.55" selected>Moderate exercise (3–5 days/week)</option>
+        <option value="1.725">Hard exercise (6–7 days/week)</option>
+      </select>
+      <button class="btn full" data-act="calc">Calculate</button>
+      <div id="cout"></div>
+    </div>
+    <p class="mut small">ApexFit shares general fitness information, not medical advice. Please consult a doctor before starting a new programme, especially if you have a health condition.</p>
+  </section>
+</main>
+
+<nav id="nav">
+  <button class="on" data-act="go" data-v="home"><span>🏠</span>Home</button>
+  <button data-act="go" data-v="food"><span>🍛</span>Food</button>
+  <button data-act="go" data-v="work"><span>🏋️</span>Workout</button>
+  <button data-act="go" data-v="yoga"><span>🧘</span>Yoga</button>
+  <button data-act="go" data-v="remind"><span>⏰</span>Remind</button>
+  <button data-act="go" data-v="about"><span>✨</span>About</button>
+</nav>
+
+<div id="modal" class="modal"><div class="sheet glass" id="sheet"></div></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
