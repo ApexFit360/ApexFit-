@@ -34,11 +34,11 @@ function todayItems() { var wd = new Date().getDay(); return REM.items.filter(fu
 
 /* ---------- ui helpers ---------- */
 function toast(m) { var t = $("toast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(function () { t.classList.remove("on"); }, 2200); }
-function closeM() { $("modal").classList.remove("on"); }
+function closeM() { if (typeof stopPlayer === "function") stopPlayer(); $("modal").classList.remove("on"); }
 function go(v) {
   document.querySelectorAll(".view").forEach(function (s) { s.classList.toggle("active", s.id === v); });
   document.querySelectorAll("#nav button").forEach(function (b) { b.classList.toggle("on", b.dataset.v === v); });
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo(0, 0);
   if (v === "home") renderHome();
 }
 function ring(p, big, small) {
@@ -81,12 +81,17 @@ function renderFood() {
     '<label class="goal">Daily goal<input id="goal" class="in sm" type="number" min="800" max="6000" value="' + GOAL + '"></label></div><div class="bar"><i style="width:' + pct + '%"></i></div>';
   var cats = ["All", "Breakfast", "Main", "Snacks", "Sweets", "Drinks"];
   $("fcats").innerHTML = cats.map(function (c) { return '<button class="chip' + (c === fcat ? ' on' : '') + '" data-act="fcat" data-c="' + c + '">' + c + '</button>'; }).join("");
+  renderFoodList(); renderPlate();
+}
+function renderFoodList() {
   var q = fq.toLowerCase().trim(), h = "";
   DISHES.forEach(function (d, i) {
     if ((fcat === "All" || d[1] === fcat) && d[0].toLowerCase().indexOf(q) > -1)
       h += '<button class="dish glass" data-act="dish" data-i="' + i + '"><span><b>' + esc(d[0]) + '</b><small>' + esc(d[2]) + '</small></span><span class="kc">' + d[3] + '<small> kcal</small></span></button>';
   });
   $("flist").innerHTML = h || '<p class="mut">No dish found.</p>';
+}
+function renderPlate() {
   var p = PL.items.map(function (i, n) { return '<div class="prow"><span>' + esc(DISHES[i][0]) + ' <small class="mut">· ' + DISHES[i][3] + ' kcal</small></span><button class="x" data-act="prm" data-i="' + n + '">✕</button></div>'; }).join("");
   $("plate").innerHTML = p ? p + '<button class="btn ghost full" style="margin-top:10px" data-act="pclr">Clear plate</button>' : '<p class="mut small" style="margin:0">Nothing added yet. Open a dish and tap “Add to today’s plate”.</p>';
 }
@@ -111,13 +116,13 @@ function renderWork() {
   if (!d[2].length) h += '<p class="mut">Rest and recovery. Take a 20–30 minute walk, stretch, or try a gentle yoga routine.</p>';
   else {
     h += '<p class="mut small">Warm up for 5 minutes. Rest 30–60 seconds between sets.</p>';
-    d[2].forEach(function (x, n) { var e = EX[x[0]]; h += '<details class="ex"><summary><span>' + (n + 1) + '. ' + esc(e.n) + '</span><b>' + esc(x[1]) + '</b></summary><p class="mut small"><em>' + esc(e.m) + '</em> — ' + esc(e.h) + '</p></details>'; });
+    d[2].forEach(function (x, n) { var e = EX[x[0]]; h += '<details class="ex"><summary><span>' + (n + 1) + '. ' + esc(e.n) + '</span><button class="wb" data-pa="watch" data-ty="ex" data-k="' + x[0] + '" data-ctx="day">▶ 3D</button><b>' + esc(x[1]) + '</b></summary><p class="mut small"><em>' + esc(e.m) + '</em> — ' + esc(e.h) + '</p></details>'; });
   }
   $("wlist").innerHTML = h + '</div>';
 }
 function renderLib() {
   var h = '<div class="glass">';
-  Object.keys(EX).forEach(function (k) { var e = EX[k]; h += '<details class="ex"><summary><span>' + esc(e.n) + '</span><b>' + esc(e.m) + '</b></summary><p class="mut small">' + esc(e.h) + '</p></details>'; });
+  Object.keys(EX).forEach(function (k) { var e = EX[k]; h += '<details class="ex"><summary><span>' + esc(e.n) + '</span><button class="wb" data-pa="watch" data-ty="ex" data-k="' + k + '" data-ctx="lib">▶ 3D</button><b>' + esc(e.m) + '</b></summary><p class="mut small">' + esc(e.h) + '</p></details>'; });
   $("wlib").innerHTML = h + '</div>';
 }
 var tmr = null;
@@ -143,7 +148,7 @@ function renderYoga() {
   if (yr >= 0) h += '<div class="glass"><div class="eyebrow">' + esc(ROUTINES[yr].t) + ' routine</div><p style="margin:6px 0 0">' + esc(ROUTINES[yr].d) + ' Follow the poses in order.</p></div>';
   keys.forEach(function (k, n) {
     var p = POSES[k];
-    h += '<details class="pose glass"><summary><span>' + (yr >= 0 ? (n + 1) + '. ' : '') + esc(p.e) + '<small>' + esc(p.n) + ' · ' + esc(p.t) + '</small></span></summary>' +
+    h += '<details class="pose glass"><summary><span>' + (yr >= 0 ? (n + 1) + '. ' : '') + esc(p.e) + '<small>' + esc(p.n) + ' · ' + esc(p.t) + '</small></span><button class="wb" data-pa="watch" data-ty="yoga" data-k="' + k + '" data-ctx="yoga">▶ 3D</button></summary>' +
       '<p class="mut small" style="margin:0 0 8px"><b style="color:var(--gold2)">Benefits:</b> ' + esc(p.b) + '</p><ol>' + p.s.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol></details>';
   });
   $("ylist").innerHTML = h;
@@ -238,7 +243,8 @@ document.addEventListener("click", function (e) {
       break;
   }
 });
-$("fq").addEventListener("input", function () { fq = this.value; renderFood(); });
+var sh;
+$("fq").addEventListener("input", function () { fq = this.value; clearTimeout(sh); sh = setTimeout(renderFoodList, 120); });
 document.addEventListener("change", function (e) {
   if (e.target.id === "goal") { var v = +e.target.value; if (v >= 800 && v <= 6000) { GOAL = v; sv("apexfit3_goal", v); } renderFood(); }
 });
@@ -247,9 +253,10 @@ window.addEventListener("appinstalled", function () { installed = true; renderHo
 
 /* ---------- start ---------- */
 function renderAll() { renderHome(); renderFood(); renderWork(); renderLib(); renderYoga(); renderRem(); }
-renderAll();
+renderHome();
+setTimeout(function () { renderFood(); renderWork(); renderLib(); renderYoga(); renderRem(); }, 30);
 tick(); setInterval(tick, 15000);
 function hideIntro() { var i = $("intro"); if (!i || i.classList.contains("out")) return; i.classList.add("out"); setTimeout(function () { i.remove(); }, 1000); }
 $("intro").addEventListener("click", hideIntro);
-setTimeout(hideIntro, 3800);
+setTimeout(hideIntro, 3000);
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
